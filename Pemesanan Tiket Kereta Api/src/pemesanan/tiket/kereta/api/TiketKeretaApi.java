@@ -4,11 +4,9 @@ package pemesanan.tiket.kereta.api;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
-import javax.swing.ActionMap;
+
 /*
  * TiketKeretaApi.java
  *
@@ -16,7 +14,7 @@ import javax.swing.ActionMap;
  */
 /**
  *
- * @author user
+ * @author lynlala
  */
 public class TiketKeretaApi extends javax.swing.JFrame {
     String nama = "";
