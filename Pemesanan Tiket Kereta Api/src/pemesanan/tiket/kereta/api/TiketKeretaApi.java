@@ -4,8 +4,11 @@ package pemesanan.tiket.kereta.api;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
+import javax.swing.ActionMap;
 /*
  * TiketKeretaApi.java
  *
@@ -41,7 +44,7 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         Harga = new javax.swing.ButtonGroup();
         Dari = new javax.swing.ButtonGroup();
         Tujuan = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        FormTiket = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -81,9 +84,13 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         seratustujuhpuluh = new javax.swing.JRadioButton();
         Pesan = new javax.swing.JButton();
         Batal = new javax.swing.JButton();
+        usiaHelp = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        FormTiket.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Train Ticket");
 
         jLabel2.setText("Nama Penumpang");
@@ -93,6 +100,12 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         Namapenumpang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NamapenumpangActionPerformed(evt);
+            }
+        });
+
+        Usia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                UsiaKeyPressed(evt);
             }
         });
 
@@ -322,14 +335,19 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         });
 
         Batal.setText("Batal");
+        Batal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BatalActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout FormTiketLayout = new javax.swing.GroupLayout(FormTiket);
+        FormTiket.setLayout(FormTiketLayout);
+        FormTiketLayout.setHorizontalGroup(
+            FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FormTiketLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
@@ -338,46 +356,44 @@ public class TiketKeretaApi extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(jLabel8))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(usiaHelp)
                     .addComponent(Namapenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Usia, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FormTiketLayout.createSequentialGroup()
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Bandung)
                             .addComponent(Jakarta)
                             .addComponent(bandung)
                             .addComponent(jakarta))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(FormTiketLayout.createSequentialGroup()
+                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(malang)
                                     .addComponent(solo))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(yogyakarta)
                                     .addComponent(semarang))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tegal)
                                     .addComponent(kebumen)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(Malang)
-                                            .addComponent(Solo))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(Yogyakarta)
-                                            .addComponent(Semarang)))
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(FormTiketLayout.createSequentialGroup()
+                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Malang)
+                                    .addComponent(Solo))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Yogyakarta)
+                                    .addComponent(Semarang))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Tegal)
                                     .addComponent(Kebumen)))))
                     .addComponent(Jumlahpenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(FormTiketLayout.createSequentialGroup()
                         .addComponent(empatpuluhlima)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(enampuluhlima)
@@ -385,111 +401,115 @@ public class TiketKeretaApi extends javax.swing.JFrame {
                         .addComponent(delapanpuluhlima)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(seratuslimapuluh))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(FormTiketLayout.createSequentialGroup()
                         .addComponent(Ekonomi)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(Bisnis))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(FormTiketLayout.createSequentialGroup()
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(FormTiketLayout.createSequentialGroup()
                                 .addComponent(limapuluhlima)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tujuhpuluhlima))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(FormTiketLayout.createSequentialGroup()
                                 .addGap(45, 45, 45)
                                 .addComponent(Pesan)))
                         .addGap(2, 2, 2)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(sembilanpuluh)
                             .addComponent(Batal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(seratustujuhpuluh)))
+                        .addComponent(seratustujuhpuluh))
+                    .addGroup(FormTiketLayout.createSequentialGroup()
+                        .addGap(158, 158, 158)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(410, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel1)
-                .addGap(11, 11, 11)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        FormTiketLayout.setVerticalGroup(
+            FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FormTiketLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(Namapenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(Usia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(usiaHelp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(Jakarta)
                     .addComponent(Solo)
                     .addComponent(Yogyakarta)
                     .addComponent(Kebumen))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FormTiketLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Bandung)
                             .addComponent(Malang)
                             .addComponent(Semarang)
                             .addComponent(Tegal))
                         .addGap(19, 19, 19)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jakarta)
                             .addComponent(solo)
                             .addComponent(yogyakarta)
                             .addComponent(kebumen))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bandung)
                             .addComponent(malang)
                             .addComponent(tegal)
                             .addComponent(semarang)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(FormTiketLayout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jLabel5)))
                 .addGap(11, 11, 11)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FormTiketLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(27, 27, 27)
                         .addComponent(jLabel7))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(FormTiketLayout.createSequentialGroup()
                         .addComponent(Jumlahpenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Ekonomi)
                             .addComponent(Bisnis))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(empatpuluhlima)
                     .addComponent(enampuluhlima)
                     .addComponent(delapanpuluhlima)
                     .addComponent(seratuslimapuluh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(limapuluhlima)
                     .addComponent(tujuhpuluhlima)
                     .addComponent(sembilanpuluh)
                     .addComponent(seratustujuhpuluh))
                 .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Batal)
                     .addComponent(Pesan))
-                .addContainerGap(330, Short.MAX_VALUE))
+                .addContainerGap(317, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(FormTiket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(FormTiket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -497,6 +517,7 @@ public class TiketKeretaApi extends javax.swing.JFrame {
 
 private void NamapenumpangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamapenumpangActionPerformed
 // TODO add your handling code here:
+    nama = evt.getActionCommand();
 }//GEN-LAST:event_NamapenumpangActionPerformed
 
 private void JakartaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JakartaActionPerformed
@@ -638,6 +659,30 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
         harga = evt.getActionCommand();
     }//GEN-LAST:event_seratustujuhpuluhActionPerformed
 
+    private void BatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BatalActionPerformed
+        // TODO add your handling code here:
+        Namapenumpang.setText(nama);
+        Usia.setText("");
+        Dari.clearSelection();
+        Tujuan.clearSelection();
+        Jumlahpenumpang.getModel().setValue(0);
+        Kelas.clearSelection();
+        Harga.clearSelection();
+    }//GEN-LAST:event_BatalActionPerformed
+
+    private void UsiaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UsiaKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9') {
+            usiaHelp.setText("");
+        } else {
+            if (evt.getKeyChar() <= '9') {
+                usiaHelp.setText("");
+            } else {
+                usiaHelp.setText("Please enter only number!!!");
+            }
+        }
+    }//GEN-LAST:event_UsiaKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -679,6 +724,7 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private javax.swing.JCheckBox Bisnis;
     private javax.swing.ButtonGroup Dari;
     private javax.swing.JCheckBox Ekonomi;
+    private javax.swing.JPanel FormTiket;
     private javax.swing.ButtonGroup Harga;
     private javax.swing.JRadioButton Jakarta;
     private javax.swing.JSpinner Jumlahpenumpang;
@@ -705,7 +751,6 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jakarta;
     private javax.swing.JRadioButton kebumen;
     private javax.swing.JRadioButton limapuluhlima;
@@ -717,6 +762,7 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private javax.swing.JRadioButton solo;
     private javax.swing.JRadioButton tegal;
     private javax.swing.JRadioButton tujuhpuluhlima;
+    private javax.swing.JLabel usiaHelp;
     private javax.swing.JRadioButton yogyakarta;
     // End of variables declaration//GEN-END:variables
 }
