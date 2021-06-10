@@ -659,7 +659,7 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
 
     private void BatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BatalActionPerformed
         // TODO add your handling code here:
-        Namapenumpang.setText(nama);
+        Namapenumpang.setText("");
         Usia.setText("");
         Dari.clearSelection();
         Tujuan.clearSelection();
