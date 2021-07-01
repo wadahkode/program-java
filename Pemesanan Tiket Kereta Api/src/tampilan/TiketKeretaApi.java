@@ -1,4 +1,4 @@
-package pemesanan.tiket.kereta.api;
+package tampilan;
 
 /*
  * To change this template, choose Tools | Templates
@@ -6,6 +6,11 @@ package pemesanan.tiket.kereta.api;
  */
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
+import java.sql.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.table.*;
+import koneksi.*;
 
 /*
  * TiketKeretaApi.java
@@ -24,6 +29,13 @@ public class TiketKeretaApi extends javax.swing.JFrame {
 //    String jml = "";
     String harga = "";
     String kelas = "";
+    
+    // database koneksi
+    private Connection db = new Database().connect();
+    
+    // table model
+    private DefaultTableModel table;
+    
     /** Creates new form TiketKeretaApi */
     public TiketKeretaApi() {
         initComponents();
@@ -42,6 +54,7 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         Harga = new javax.swing.ButtonGroup();
         Dari = new javax.swing.ButtonGroup();
         Tujuan = new javax.swing.ButtonGroup();
+        jFrame1 = new javax.swing.JFrame();
         FormTiket = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -83,9 +96,24 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         Pesan = new javax.swing.JButton();
         Batal = new javax.swing.JButton();
         usiaHelp = new javax.swing.JLabel();
+        TableData = new javax.swing.JScrollPane();
+        tableData = new javax.swing.JTable();
+        btnTampilData = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        FormTiket.setAutoscrolls(true);
         FormTiket.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -339,89 +367,137 @@ public class TiketKeretaApi extends javax.swing.JFrame {
             }
         });
 
+        tableData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "No", "Nama", "Usia", "Dari", "Tujuan", "Jumlah penumpang", "Kelas", "Harga"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TableData.setViewportView(tableData);
+        if (tableData.getColumnModel().getColumnCount() > 0) {
+            tableData.getColumnModel().getColumn(0).setPreferredWidth(36);
+            tableData.getColumnModel().getColumn(1).setPreferredWidth(200);
+            tableData.getColumnModel().getColumn(5).setPreferredWidth(150);
+        }
+
+        btnTampilData.setText("Tampilkan Data");
+        btnTampilData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTampilDataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout FormTiketLayout = new javax.swing.GroupLayout(FormTiket);
         FormTiket.setLayout(FormTiketLayout);
         FormTiketLayout.setHorizontalGroup(
             FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(FormTiketLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FormTiketLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(usiaHelp)
-                    .addComponent(Namapenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Usia, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(FormTiketLayout.createSequentialGroup()
                         .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Bandung)
-                            .addComponent(Jakarta)
-                            .addComponent(bandung)
-                            .addComponent(jakarta))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addGroup(FormTiketLayout.createSequentialGroup()
+                                .addComponent(Pesan)
+                                .addGap(18, 18, 18)
+                                .addComponent(Batal)))
+                        .addGap(18, 18, 18)
                         .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(FormTiketLayout.createSequentialGroup()
-                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(malang)
-                                    .addComponent(solo))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(yogyakarta)
-                                    .addComponent(semarang))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tegal)
-                                    .addComponent(kebumen)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnTampilData))
                             .addGroup(FormTiketLayout.createSequentialGroup()
                                 .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Malang)
-                                    .addComponent(Solo))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Yogyakarta)
-                                    .addComponent(Semarang))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Tegal)
-                                    .addComponent(Kebumen)))))
-                    .addComponent(Jumlahpenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(usiaHelp)
+                                    .addGroup(FormTiketLayout.createSequentialGroup()
+                                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(Bandung)
+                                            .addComponent(Jakarta)
+                                            .addComponent(bandung)
+                                            .addComponent(jakarta))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(FormTiketLayout.createSequentialGroup()
+                                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(malang)
+                                                    .addComponent(solo))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(yogyakarta)
+                                                    .addComponent(semarang))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(tegal)
+                                                    .addComponent(kebumen)))
+                                            .addGroup(FormTiketLayout.createSequentialGroup()
+                                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(Malang)
+                                                    .addComponent(Solo))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(Yogyakarta)
+                                                    .addComponent(Semarang))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(Tegal)
+                                                    .addComponent(Kebumen)))))
+                                    .addComponent(Jumlahpenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(FormTiketLayout.createSequentialGroup()
+                                        .addComponent(empatpuluhlima)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(enampuluhlima)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(delapanpuluhlima)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(seratuslimapuluh))
+                                    .addGroup(FormTiketLayout.createSequentialGroup()
+                                        .addComponent(Ekonomi)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(Bisnis))
+                                    .addGroup(FormTiketLayout.createSequentialGroup()
+                                        .addGap(158, 158, 158)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(Namapenumpang, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Usia, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(FormTiketLayout.createSequentialGroup()
+                                        .addComponent(limapuluhlima)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tujuhpuluhlima)
+                                        .addGap(2, 2, 2)
+                                        .addComponent(sembilanpuluh)
+                                        .addGap(53, 53, 53)
+                                        .addComponent(seratustujuhpuluh)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(FormTiketLayout.createSequentialGroup()
-                        .addComponent(empatpuluhlima)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(enampuluhlima)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(delapanpuluhlima)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(seratuslimapuluh))
-                    .addGroup(FormTiketLayout.createSequentialGroup()
-                        .addComponent(Ekonomi)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Bisnis))
-                    .addGroup(FormTiketLayout.createSequentialGroup()
-                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(FormTiketLayout.createSequentialGroup()
-                                .addComponent(limapuluhlima)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tujuhpuluhlima))
-                            .addGroup(FormTiketLayout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addComponent(Pesan)))
-                        .addGap(2, 2, 2)
-                        .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sembilanpuluh)
-                            .addComponent(Batal))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(seratustujuhpuluh))
-                    .addGroup(FormTiketLayout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(410, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(TableData, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(185, 185, 185))
         );
         FormTiketLayout.setVerticalGroup(
             FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -495,7 +571,10 @@ public class TiketKeretaApi extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(FormTiketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Batal)
-                    .addComponent(Pesan))
+                    .addComponent(Pesan)
+                    .addComponent(btnTampilData))
+                .addGap(34, 34, 34)
+                .addComponent(TableData, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(317, Short.MAX_VALUE))
         );
 
@@ -503,11 +582,17 @@ public class TiketKeretaApi extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormTiket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addComponent(FormTiket, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormTiket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(FormTiket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -534,12 +619,59 @@ private void EkonomiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 }//GEN-LAST:event_EkonomiActionPerformed
 
 private void PesanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PesanActionPerformed
-// TODO add your handling code here:
+    // TODO add your handling code here:
     nama = Namapenumpang.getText();
     umur = Usia.getText();
     SpinnerModel jml = Jumlahpenumpang.getModel();
+    int minOrder = 1;
     
-    JOptionPane.showMessageDialog(this, "Nama: " + nama + "\nUmur: " + umur + "\nDari: " + dari + "\nTujuan: " + tujuan + "\nJumlah penumpang: " + jml.getValue() + "\nKelas: " + kelas + "\nHarga: " + harga);
+    
+    if (nama.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong");
+    }
+    else if (umur.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Umur tidak boleh kosong");
+    }
+    else if (dari.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Silahkan tentukan dari mana anda berangkat.");
+    }
+    else if (tujuan.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Silahkan tentukan kota tujuan anda.");
+    }
+    else if (jml.getValue().hashCode() < minOrder) {
+        JOptionPane.showMessageDialog(this, "Silahkan tentukan jumlah penumpang.");
+    }
+    else if (kelas.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Silahkan tentukan mau make kelas yang mana?");
+    }
+    else if (harga.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Silahkan tentukan biaya keberangkatan anda.");
+    }
+    else {
+        // JOptionPane.showMessageDialog(this, "Nama: " + nama + "\nUmur: " + umur + "\nDari: " + dari + "\nTujuan: " + tujuan + "\nJumlah penumpang: " + jml.getValue() + "\nKelas: " + kelas + "\nHarga: " + harga);
+        try {
+            Statement state = db.createStatement();
+            final String regex = "([\\d].+)";
+            final Pattern pattern = Pattern.compile(regex);
+            final Matcher matcher = pattern.matcher(harga);
+            
+            while (matcher.find()) {
+                for (int i = 1; i <= matcher.groupCount(); i++) {
+                    harga = matcher.group(i);
+                }
+            }
+            
+            harga = harga.replaceAll("\\.", "");
+            
+            String sql = "INSERT INTO struk(nama,usia,dari,tujuan,jumlah_penumpang,kelas,harga) VALUES ('" + nama + "','" + umur + "','" + dari + "','" + tujuan + "','" + jml.getValue() + "','" + kelas + "','" + harga.replaceAll("/(.*)/", "") + "')";
+            
+            state.executeUpdate(sql);
+            state.close();
+            JOptionPane.showMessageDialog(this, "Berhasil menambahkan data.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
 }//GEN-LAST:event_PesanActionPerformed
 
 private void empatpuluhlimaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empatpuluhlimaActionPerformed
@@ -681,6 +813,39 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
         }
     }//GEN-LAST:event_UsiaKeyPressed
 
+    private void btnTampilDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTampilDataActionPerformed
+        table = (DefaultTableModel) tableData.getModel();
+        table.getDataVector().removeAllElements();
+        table.fireTableDataChanged();
+        
+        try {
+            Statement state = db.createStatement();
+            
+            String sql = "SELECT * FROM struk ORDER BY 'id_struk' DESC LIMIT 10";
+            ResultSet response = state.executeQuery(sql);
+            
+            while (response.next()) {
+                Object[] obj = new Object[8];
+                
+                obj[0] = response.getString("id_struk");
+                obj[1] = response.getString("nama");
+                obj[2] = response.getString("usia");
+                obj[3] = response.getString("dari");
+                obj[4] = response.getString("tujuan");
+                obj[5] = response.getString("jumlah_penumpang");
+                obj[6] = response.getString("kelas");
+                obj[7] = response.getString("harga");
+                
+                table.addRow(obj);
+            }
+            
+            state.close();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnTampilDataActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -733,14 +898,17 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private javax.swing.JButton Pesan;
     private javax.swing.JRadioButton Semarang;
     private javax.swing.JRadioButton Solo;
+    private javax.swing.JScrollPane TableData;
     private javax.swing.JRadioButton Tegal;
     private javax.swing.ButtonGroup Tujuan;
     private javax.swing.JTextField Usia;
     private javax.swing.JRadioButton Yogyakarta;
     private javax.swing.JRadioButton bandung;
+    private javax.swing.JButton btnTampilData;
     private javax.swing.JRadioButton delapanpuluhlima;
     private javax.swing.JRadioButton empatpuluhlima;
     private javax.swing.JRadioButton enampuluhlima;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -758,6 +926,7 @@ private void BisnisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private javax.swing.JRadioButton seratuslimapuluh;
     private javax.swing.JRadioButton seratustujuhpuluh;
     private javax.swing.JRadioButton solo;
+    private javax.swing.JTable tableData;
     private javax.swing.JRadioButton tegal;
     private javax.swing.JRadioButton tujuhpuluhlima;
     private javax.swing.JLabel usiaHelp;
